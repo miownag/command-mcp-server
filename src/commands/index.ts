@@ -27,14 +27,14 @@ export default defineCommand({
       },
       async ({ path, command, args }) => {
         const cmdString = `${command} ${args.join(" ")}`;
-        if (cmdString === 'rm -rf /') {
-          throw new Error('rm -rf / is not allowed');
+        if (cmdString.includes("rm -rf /")) {
+          throw new Error("rm -rf / is not allowed");
         }
-        if (cmdString === 'rm -rf ~') {
-          throw new Error('rm -rf ~ is not allowed');
+        if (cmdString.includes("rm -rf ~")) {
+          throw new Error("rm -rf ~ is not allowed");
         }
-        if (cmdString === 'rm -rf ~/') {
-          throw new Error('rm -rf ~/ is not allowed');
+        if (cmdString.includes("rm -rf ~/")) {
+          throw new Error("rm -rf ~/ is not allowed");
         }
         try {
           const res = await execAsync(cmdString, {
@@ -44,20 +44,30 @@ export default defineCommand({
             content: [
               {
                 type: "text",
-                text: res.stdout.trim(),
+                text: `Stdout: ${res.stdout.trim()}`,
+              },
+              {
+                type: "text",
+                text: `Stderr: ${res.stderr.trim()}`,
               },
             ],
           };
         } catch (error: unknown) {
           const errorMessage =
-            error instanceof Error ? error.message : "Execute Failed";
+            error instanceof Error ? error.message : String(error);
+          const exitCode = (error as any)?.code || 1;
           return {
             content: [
               {
                 type: "text",
-                text: errorMessage,
+                text: `Error Message: ${(error as any)?.stderr || errorMessage}`,
+              },
+              {
+                type: "text",
+                text: `Exit Code: ${exitCode}`,
               },
             ],
+            isError: true,
           };
         }
       }
