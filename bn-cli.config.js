@@ -1,4 +1,5 @@
 export default {
   "commandsDir": "./src/commands",
-  "outDir": "./dist"
+  "outDir": "./dist",
+  "minify": true
 };
