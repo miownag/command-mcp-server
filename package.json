@@ -1,5 +1,5 @@
 {
-  "name": "command-mcp-server",
+  "name": "@miownag/command-mcp-server",
   "version": "1.0.0",
   "main": "./dist/index.cjs",
   "scripts": {
@@ -22,5 +22,9 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.17.5",
     "zod": "3"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   }
 }
